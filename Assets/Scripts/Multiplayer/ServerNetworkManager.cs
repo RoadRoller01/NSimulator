@@ -21,6 +21,7 @@ public class ServerNetworkManager : MonoBehaviour
     }
 
     public Server Server { get; private set; }
+    public bool isServer = false;
 
     [SerializeField] private ushort port;
     [SerializeField] private ushort maxClientCount;
@@ -32,11 +33,14 @@ public class ServerNetworkManager : MonoBehaviour
 
     private void Start()
     {
+        isServer = true;
         Application.targetFrameRate = 60;
 
         RiptideLogger.Initialize(Debug.Log, Debug.Log, Debug.LogWarning, Debug.LogError, false);
+
         Server = new Server();
         Server.Start(port, maxClientCount);
+        Server.ClientDisconnected += PlayerLeft;
     }
 
     private void FixedUpdate()
@@ -46,6 +50,14 @@ public class ServerNetworkManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        Server.Stop();
+        if (isServer)
+        {
+            Server.Stop();
+        }
+    }
+
+    private void PlayerLeft(object sender, ClientDisconnectedEventArgs e)
+    {
+        ServerPlayer.list.Remove(e.Id);
     }
 }
