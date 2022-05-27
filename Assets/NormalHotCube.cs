@@ -1,10 +1,9 @@
-using RiptideNetworking;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HotCube : MonoBehaviour
+public class NormalHotCube : MonoBehaviour
 {
-    public float speed = 10;
+    float speed = 10;
     // Start is called before the first frame update
     // void Start()
     // {
@@ -25,9 +24,5 @@ public class HotCube : MonoBehaviour
 
         transform.position += moveAmount;
 
-    }
-    void FixedUpdate()
-    {
-        ClientNetworkManager.Singleton.Client.Send(Message.Create(MessageSendMode.unreliable, ClientToServerId.move).AddVector3(transform.position));
     }
 }
